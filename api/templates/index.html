@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secored - Calculadora de Cielorraso PVC</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --surface-color: #0f0f0f;
+            --accent: #39ff14;
+            --accent-hover: #32e612;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --text-light: #cccccc;
+            --border: #222222;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-section {
+            background-color: var(--surface-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0px 4px 20px rgba(57, 255, 20, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-main);
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 5px rgba(57, 255, 20, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(57, 255, 20, 0.3);
+        }
+
+        .links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            justify-content: center;
+        }
+
+        .links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .links a:hover {
+            color: var(--accent);
+        }
+        
+        #resultContainer {
+            display: none;
+        }
+
+        .resultado-seccion {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .resultado-titulo {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .resultado-stats {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .resultado-stats span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .list-row {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #1a1a1a;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .list-row:last-child {
+            border-bottom: none;
+        }
+
+        .col-code {
+            width: 80px;
+            color: #55ff55;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .col-name {
+            flex-grow: 1;
+            color: var(--text-light);
+        }
+
+        .col-qty {
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: right;
+            color: var(--text-main);
+        }
+
+        .col-qty span {
+            font-weight: 400;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-left: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--accent);
+            display: none;
+            padding: 2rem;
+            font-weight: 600;
+        }
+
+        .desperdicio {
+            margin-top: 1rem;
+            color: #ffaa00;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .code-block {
+            background: #050505;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #222;
+            color: #aaa;
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="form-section">
+            <h1>Cálculo de Cielorraso PVC</h1>
+            <div class="subtitle">API de Materiales Secored</div>
+            <form id="calcForm">
+                <div class="form-group">
+                    <label for="medidas">Medidas</label>
+                    <input type="text" id="medidas" placeholder="Ej: 8*8+9*9" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="orientacion">Orientación de las tablas</label>
+                    <select id="orientacion">
+                        <option value="2">2) Paralelo al lado LARGO</option>
+                        <option value="1">1) Paralelo al lado CORTO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="color">¿Desea PVC a Color?</label>
+                    <select id="color">
+                        <option value="false">No</option>
+                        <option value="true">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="aislacion">¿Desea agregar Aislación Térmica (Lana de vidrio)?</label>
+                    <select id="aislacion">
+                        <option value="false">No</option>
+                        <option value="true">Sí</option>
+                    </select>
+                </div>
+
+                <button type="submit">Calcular Materiales</button>
+            </form>
+            <div class="links">
+                <a href="/api/logs/" target="_blank">Consultar Logs (JSON)</a>
+            </div>
+            
+            <div class="code-block" id="curl-example">
+                curl -X POST http://127.0.0.1:8000/api/calculate/ \
+                -H "Content-Type: application/json" \
+                -d '{"medidas": "8*8+9*9", "orientacion": 2, "color": false, "aislacion": false}'
+            </div>
+        </div>
+
+        <div class="loading" id="loadingSpinner">Calculando configuración...</div>
+        
+        <div id="resultContainer"></div>
+
+    </div>
+
+    <script>
+        document.getElementById('calcForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const medidas = document.getElementById('medidas').value;
+            const orientacion = parseInt(document.getElementById('orientacion').value);
+            const color = document.getElementById('color').value === 'true';
+            const aislacion = document.getElementById('aislacion').value === 'true';
+            
+            const resultBox = document.getElementById('resultContainer');
+            const loading = document.getElementById('loadingSpinner');
+
+            resultBox.style.display = 'none';
+            loading.style.display = 'block';
+            resultBox.innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/calculate/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        medidas: medidas,
+                        orientacion: orientacion,
+                        color: color,
+                        aislacion: aislacion
+                    })
+                });
+                let data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Error en el cálculo');
+                
+                // Extraer el primer elemento como pidió el usuario en el formato JSON
+                if (Array.isArray(data)) data = data[0];
+                
+                let html = '';
+                
+                // Mostrar resultados individuales
+                data.cielorrasos.forEach((cielorraso, index) => {
+                    const titulo = `CIELORRASO ${index + 1} - Paralelo al lado ${data.orientacion_str}`;
+                    
+                    let itemsHtml = `
+                        <div class="list-row">
+                            <div class="col-code">${cielorraso.codigo_placa}</div>
+                            <div class="col-name">${cielorraso.desc_placa}</div>
+                            <div class="col-qty">${cielorraso.tables} <span>unid. (${cielorraso.C}m)</span></div>
+                        </div>
+                    `;
+                    
+                    const matConfigs = [
+                        {cod: cielorraso.borde_codigo, nombre: cielorraso.borde_nombre, cant: cielorraso.borde_cant},
+                        {cod: cielorraso.h_cant > 0 ? cielorraso.h_codigo : null, nombre: cielorraso.h_nombre, cant: cielorraso.h_cant},
+                        {cod: cielorraso.soleras_codigo, nombre: cielorraso.soleras_nombre, cant: cielorraso.soleras_cant},
+                        {cod: cielorraso.montantes_codigo, nombre: cielorraso.montantes_nombre, cant: cielorraso.montantes_cant},
+                        {cod: cielorraso.t8_codigo, nombre: cielorraso.t8_nombre, cant: cielorraso.t8_cant},
+                        {cod: cielorraso.tarugos_codigo, nombre: cielorraso.tarugos_nombre, cant: cielorraso.tarugos_cant},
+                        {cod: cielorraso.t1_codigo, nombre: cielorraso.t1_nombre, cant: cielorraso.t1_cant}
+                    ];
+                    
+                    matConfigs.forEach(m => {
+                        if (m.cod && m.cant > 0) {
+                            itemsHtml += `
+                                <div class="list-row">
+                                    <div class="col-code">${m.cod}</div>
+                                    <div class="col-name">${m.nombre}</div>
+                                    <div class="col-qty">${m.cant} <span>unid.</span></div>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if (cielorraso.lana_cant) {
+                        itemsHtml += `
+                            <div class="list-row" style="background:#111; padding-left:10px; border-left: 2px solid var(--accent)">
+                                <div class="col-code">${cielorraso.lana_codigo}</div>
+                                <div class="col-name">${cielorraso.lana_nombre}</div>
+                                <div class="col-qty">${cielorraso.lana_cant} <span>rollos</span></div>
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                        <div class="resultado-seccion">
+                            <div class="resultado-titulo">${titulo}</div>
+                            <div class="resultado-stats">
+                                Medidas: <span>${cielorraso.largo}m × ${cielorraso.ancho}m</span> | 
+                                Superficie: <span>${cielorraso.area.toFixed(2)} m²</span>
+                            </div>
+                            ${itemsHtml}
+                            <div class="desperdicio">Desperdicio PVC: ${cielorraso.waste_pct}%</div>
+                        </div>
+                    `;
+                });
+
+                // Mostrar consolidado si es múltiple
+                if (data.multiple && data.consolidado) {
+                    let totalHtml = '';
+                    const totalObj = data.consolidado.total;
+                    for (const cod in totalObj) {
+                        totalHtml += `
+                            <div class="list-row">
+                                <div class="col-code">${cod}</div>
+                                <div class="col-name">${totalObj[cod].desc}</div>
+                                <div class="col-qty">${totalObj[cod].cant} <span>unid.</span></div>
+                            </div>
+                        `;
+                    }
+                    
+                    html += `
+                        <div class="resultado-seccion" style="border-color: var(--accent);">
+                            <div class="resultado-titulo" style="color: #fff">📦 TOTAL CONSOLIDADO</div>
+                            <div class="resultado-stats">
+                                Cielorrasos: <span>${data.cielorrasos.length}</span> | 
+                                Superficie total: <span>${data.consolidado.area_total.toFixed(2)} m²</span>
+                            </div>
+                            ${totalHtml}
+                            <div class="desperdicio">Desperdicio promedio PVC: ${data.consolidado.waste_pct_global}%</div>
+                        </div>
+                    `;
+                }
+
+                resultBox.innerHTML = html;
+                resultBox.style.display = 'block';
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
