@@ -295,6 +295,14 @@ def calcular_pvc(medidas_input, orientacion_int, color_opc, lana_opc):
             cielorraso_data['lana_nombre'] = lana_res['desc']
             cielorraso_data['lana_cant'] = lana_res['cantidad']
         
+        cielorraso_data['borde'] = res['borde']
+        cielorraso_data['h'] = res['h']
+        cielorraso_data['soleras'] = res['soleras']
+        cielorraso_data['montantes'] = res['montantes']
+        cielorraso_data['t8'] = res['t8']
+        cielorraso_data['tarugos'] = res['tarugos']
+        cielorraso_data['t1'] = res['t1']
+        
         resultados_individuales.append(cielorraso_data)
     
     final_output = {
